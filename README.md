@@ -37,7 +37,7 @@ Workaround using this action:
 job:
    runs-on: ubuntu-latest
    steps:
-   - uses: mosteo/actions@docker-run/v1
+   - uses: mosteo-actions/docker-run@v1
      with:
        image: ${{ matrix.tag }}
        command: uname -a
