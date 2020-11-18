@@ -1,6 +1,10 @@
-name: 'docker run'
-description: 'run a command/script within a Docker Hub image'
+name: 'Run within Docker'
+description: 'Run a command/script within a parameter Docker Hub image'
 author: 'Alejandro R. Mosteo'
+
+branding:
+  icon: 'box'
+  color: 'blue'
 
 inputs: 
   image:

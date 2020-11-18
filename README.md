@@ -7,9 +7,6 @@ See [this
 discussion](https://github.community/t/expressions-in-docker-uri/16271) for
 more background context.
 
-You can, of course, create an Action that runs in a predetermined image. Or you
-can run your 
-
 In other words, this action is a workaround for the limitation in GitHub
 Actions (as of 2020-11-18) that expressions cannot be used for defining the
 actual image of the container to be used:
