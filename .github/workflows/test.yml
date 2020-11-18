@@ -1,0 +1,12 @@
+name: Test Workflow
+
+on: [pull_request, push]
+
+jobs:
+  tester:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+      
+    - name: test docker-run action
+      uses: mosteo/actions@docker-run/v1

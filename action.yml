@@ -1,0 +1,25 @@
+name: 'docker run'
+description: 'run a command/script within a Docker Hub image'
+author: 'Alejandro R. Mosteo'
+
+inputs: 
+  image:
+    description: 'A dockerhub image'
+    default: 'ubuntu:latest'
+  command:
+    description: 'Command to run inside image'
+    default: 'ls -al'
+  params:
+    description: 'Extra parameters to pass to `docker run`'
+    default: ''
+  host-dir:
+    description: 'Host dir to map into the container'
+    default: '${{ github.workspace }}'
+  guest-dir:
+    description: 'Guest dir that will overlay host-dir, and be used as working directory'
+    default: '${{ github.workspace }}'
+    # By using the same host:guest mapping, the host $PATH is valid in both
+
+runs:
+  using: 'node12'
+  main: 'main.js'
