@@ -13,6 +13,9 @@ inputs:
   command:
     description: 'Command to run inside image'
     default: 'ls -al'
+  pull-params:
+    description: 'Extra parameters to pass to `docker pull`'
+    default: ''
   params:
     description: 'Extra parameters to pass to `docker run`'
     default: ''

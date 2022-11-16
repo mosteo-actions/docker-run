@@ -39,7 +39,7 @@ var github = require('@actions/github');
 var dockerCommand = require('docker-cli-js').dockerCommand;
 function run() {
     return __awaiter(this, void 0, void 0, function () {
-        var image, hostDir, guestDir, command, params, error_1;
+        var image, hostDir, guestDir, command, params, pparams, error_1;
         return __generator(this, function (_a) {
             switch (_a.label) {
                 case 0:
@@ -49,9 +49,10 @@ function run() {
                     guestDir = core.getInput('guest-dir');
                     command = core.getInput('command');
                     params = core.getInput('params');
+                    pparams = core.getInput('pull-params');
                     core.info("Host PATH: " + process.env.PATH);
                     // pull the required machine
-                    return [4 /*yield*/, dockerCommand("pull " + image)];
+                    return [4 /*yield*/, dockerCommand("pull " + pparams + " " + image)];
                 case 1:
                     // pull the required machine
                     _a.sent();
