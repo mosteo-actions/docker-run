@@ -25,5 +25,5 @@ inputs:
     # By using the same host:guest mapping, the host $PATH is valid in both
 
 runs:
-  using: 'node12'
+  using: 'node16'
   main: 'main.js'
