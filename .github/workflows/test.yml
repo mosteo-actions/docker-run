@@ -6,7 +6,14 @@ jobs:
   tester:
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v2
-      
+    - uses: actions/checkout@v3
+
+    - name: Check PR comes from proper branch
+      if: (github.head_ref || github.ref_name) != 'v1-next'
+      uses: actions/github-script@v3
+      with:
+        script: |
+          core.setFailed(`PRs for v1 must come from v1-next, but branch is ${{github.head_ref || github.ref_name}}`)
+
     - name: test docker-run action
-      uses: mosteo/actions@docker-run/v1
+      uses: mosteo-actions/docker-run@v1-next
