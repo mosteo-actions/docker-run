@@ -1,7 +1,7 @@
 const core = require('@actions/core');
 const github = require('@actions/github');
 const { dockerCommand } = require('docker-cli-js');
- 
+
 async function run() {
    try {
       const image    : string = core.getInput('image');
@@ -11,7 +11,7 @@ async function run() {
       const params   : string = core.getInput('params');
 
       core.info(`Host PATH: ${process.env.PATH}`);
-    
+
       // pull the required machine
       await dockerCommand(`pull ${image}`);
       core.info(`Pulled OK: ${image}`);
@@ -20,7 +20,7 @@ async function run() {
       await dockerCommand(`run ${params} -w ${guestDir} -v${hostDir}:${guestDir} ${image} ${command}`);
       core.info (`Ran OK: ${command}`);
 
-   } catch (error) {
+   } catch (error: any) {
       core.setFailed(error.message);
    }
 };
