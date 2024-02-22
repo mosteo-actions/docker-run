@@ -6,7 +6,7 @@ branding:
   icon: 'box'
   color: 'blue'
 
-inputs: 
+inputs:
   image:
     description: 'A dockerhub image'
     default: 'ubuntu:latest'
@@ -28,5 +28,5 @@ inputs:
     # By using the same host:guest mapping, the host $PATH is valid in both
 
 runs:
-  using: 'node16'
+  using: 'node20'
   main: 'main.js'

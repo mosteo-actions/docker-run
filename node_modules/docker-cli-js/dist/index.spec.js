@@ -1,0 +1,159 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+/* tslint:disable:no-shadowed-variable */
+/* tslint:disable:no-unused-variable */
+const test = require("blue-tape");
+const path = require("path");
+const index_1 = require("./index");
+const { dockerCommand } = require("./index");
+test("docker-cli-js dockerCommand", (t) => {
+    t.test("info", (t) => {
+        const options = {
+            currentWorkingDirectory: null,
+            echo: true,
+            macineName: null,
+        };
+        return dockerCommand("info", options).then(function (data) {
+            //console.log("data", data);
+            //console.log("data.object", data.object);
+            t.ok(data);
+            t.ok(data.object.server_version);
+        });
+    });
+});
+test("docker-cli-js", (t) => {
+    t.test("info", (t) => {
+        const docker = new index_1.Docker();
+        return docker.command("info").then(function (data) {
+            console.log(data);
+            t.ok(data);
+            t.ok(data.object.server_version);
+        });
+    });
+    t.test("build", (t) => {
+        const options = new index_1.Options(
+        /* machineName */ undefined, 
+        /* currentWorkingDirectory */ path.join(__dirname, "..", "test", "nginx"));
+        const docker = new index_1.Docker(options);
+        return docker.command("build -t nginximg .").then(function (data) {
+            console.log("data = ", data);
+            t.ok(data);
+            t.ok(data.success);
+        });
+    });
+    t.test("run", (t) => {
+        const docker = new index_1.Docker();
+        return docker.command("run --name nginxcont -d -p 80:80 nginximg").then(function (data) {
+            console.log("data = ", data);
+            t.ok(data.containerId);
+        });
+    });
+    t.test("ps", (t) => {
+        const docker = new index_1.Docker();
+        return docker.command("ps").then(function (data) {
+            console.log("data = ", data);
+            t.ok(data.containerList);
+        });
+    });
+    t.test("images", (t) => {
+        const docker = new index_1.Docker();
+        return docker.command("images").then(function (data) {
+            console.log("data = ", data);
+            t.ok(data.images);
+        });
+    });
+    t.test("network ls", (t) => {
+        const docker = new index_1.Docker();
+        return docker.command("network ls").then(function (data) {
+            console.log("data = ", data);
+            t.ok(data.network);
+        });
+    });
+    t.test("inspect", (t) => {
+        const docker = new index_1.Docker();
+        return docker.command("inspect nginxcont").then(function (data) {
+            console.log("data = ", data);
+            t.ok(data.object);
+        });
+    });
+    t.test("search", (t) => {
+        const docker = new index_1.Docker();
+        return docker.command("search nginxcont").then(function (data) {
+            console.log("data = ", data);
+            t.ok(data.images);
+        });
+    });
+    t.test("login success", (t) => {
+        const docker = new index_1.Docker();
+        // if this these credentials ever fail, they should be replaced with new valid ones.
+        return docker.command("login -u myusername -p mypassword").then(function (data) {
+            console.log("data = ", data);
+            // if login succeeds, these tests should pass
+            t.notOk(/error/.test(data));
+            t.ok(data.login);
+        }, function (data) {
+            console.log("data = ", data);
+            // if login is rejected, these tests should fail
+            t.notOk(/error/.test(data));
+            t.ok(data.login);
+        });
+    });
+    t.test("login fail", (t) => {
+        const docker = new index_1.Docker();
+        return docker.command("login -u fakeUsername -p fakePassword").then(function (data) {
+            console.log("data = ", data);
+            // if login succeeds, these tests should fail
+            t.ok(/error/.test(data));
+            t.notOk(data.login);
+        }, function (data) {
+            console.log("data = ", data);
+            // if login is rejected, these tests should pass
+            t.ok(/error/.test(data));
+            t.notOk(data.login);
+        });
+    });
+    t.test("pull latest", (t) => {
+        const docker = new index_1.Docker();
+        return docker.command("pull nginx").then(function (data) {
+            console.log("data = ", data);
+            t.ok(data.login);
+        });
+    });
+    t.test("pull specific tag", (t) => {
+        const docker = new index_1.Docker();
+        return docker.command("pull nginx:1.15.2").then(function (data) {
+            console.log("data = ", data);
+            t.ok(data.login);
+        });
+    });
+    t.test("pull intentionally failed, invalid image", (t) => {
+        const docker = new index_1.Docker();
+        return docker.command("pull nginx:999.999.999").then(function (data) {
+            console.log("data = ", data);
+            t.notOk(data.login);
+        }, function (rejected) {
+            console.log("rejected = ", rejected);
+            t.ok(/error/.test(rejected));
+        });
+    });
+    t.test("push intentionally failed, denied repo access", (t) => {
+        const docker = new index_1.Docker();
+        return docker.command("push nginx").then(function (data) {
+            console.log("data = ", data);
+            t.ok(data.login);
+        }, function (rejected) {
+            console.log("rejected = ", rejected);
+            t.ok(/error/.test(rejected));
+        });
+    });
+    t.test("push intentionally failed, local image does not exist", (t) => {
+        const docker = new index_1.Docker();
+        return docker.command("push dmarionertfulthestoncoag").then(function (data) {
+            console.log("data = ", data);
+            t.ok(data.login);
+        }, function (rejected) {
+            console.log("rejected = ", rejected);
+            t.ok(/error/.test(rejected));
+        });
+    });
+});
