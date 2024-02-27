@@ -19,9 +19,10 @@ function run() {
             const guestDir = core.getInput('guest-dir');
             const command = core.getInput('command');
             const params = core.getInput('params');
+            const pull_params = core.getInput('pull_params');
             core.info(`Host PATH: ${process.env.PATH}`);
             // pull the required machine
-            yield dockerCommand(`pull ${image}`);
+            yield dockerCommand(`pull ${pull_params} ${image}`);
             core.info(`Pulled OK: ${image}`);
             // run it
             yield dockerCommand(`run ${params} -w ${guestDir} -v${hostDir}:${guestDir} ${image} ${command}`);
