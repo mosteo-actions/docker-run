@@ -9,11 +9,12 @@ async function run() {
       const guestDir : string = core.getInput('guest-dir');
       const command  : string = core.getInput('command');
       const params   : string = core.getInput('params');
+      const pull_params   : string = core.getInput('pull-params');
 
       core.info(`Host PATH: ${process.env.PATH}`);
 
       // pull the required machine
-      await dockerCommand(`pull ${image}`);
+      await dockerCommand(`pull ${pull_params} ${image}`);
       core.info(`Pulled OK: ${image}`);
 
       // run it
