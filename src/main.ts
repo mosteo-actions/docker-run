@@ -18,7 +18,7 @@ async function run() {
       core.info(`Pulled OK: ${image}`);
 
       // run it
-      await dockerCommand(`run ${params} -w ${guestDir} -v${hostDir}:${guestDir} ${image} ${command}`);
+      await dockerCommand(`run ${params} -w ${guestDir} -v${hostDir}:${guestDir} ${image} /bin/sh -c '${command}'`);
       core.info (`Ran OK: ${command}`);
 
    } catch (error: any) {

@@ -25,7 +25,7 @@ function run() {
             yield dockerCommand(`pull ${pull_params} ${image}`);
             core.info(`Pulled OK: ${image}`);
             // run it
-            yield dockerCommand(`run ${params} -w ${guestDir} -v${hostDir}:${guestDir} ${image} ${command}`);
+            yield dockerCommand(`run ${params} -w ${guestDir} -v${hostDir}:${guestDir} ${image} /bin/sh -c '${command}'`);
             core.info(`Ran OK: ${command}`);
         }
         catch (error) {
