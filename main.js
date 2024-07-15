@@ -11,6 +11,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 const core = require('@actions/core');
 const github = require('@actions/github');
 const { dockerCommand } = require('docker-cli-js');
+const shellQuote = require('shell-quote');
 function run() {
     return __awaiter(this, void 0, void 0, function* () {
         try {
@@ -24,9 +25,24 @@ function run() {
             // pull the required machine
             yield dockerCommand(`pull ${pull_params} ${image}`);
             core.info(`Pulled OK: ${image}`);
+            // Parse the command into an array of arguments
+            const parsedCommand = shellQuote.parse(command);
+            // Escape and quote each argument
+            const escapedCommand = shellQuote.quote(parsedCommand);
+            // Construct the full Docker command
+            const fullCommand = [
+                'run',
+                ...shellQuote.parse(params),
+                '-w', guestDir,
+                '-v', `${hostDir}:${guestDir}`,
+                image,
+                '/bin/sh',
+                '-c',
+                escapedCommand
+            ];
             // run it
-            yield dockerCommand(`run ${params} -w ${guestDir} -v${hostDir}:${guestDir} ${image} ${command}`);
-            core.info(`Ran OK: ${command}`);
+            yield dockerCommand(shellQuote.quote(fullCommand));
+            core.info(`Ran OK: ${shellQuote.quote(fullCommand)}`);
         }
         catch (error) {
             core.setFailed(error.message);

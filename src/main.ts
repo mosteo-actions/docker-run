@@ -1,6 +1,7 @@
 const core = require('@actions/core');
 const github = require('@actions/github');
 const { dockerCommand } = require('docker-cli-js');
+const shellQuote = require('shell-quote');
 
 async function run() {
    try {
@@ -17,9 +18,27 @@ async function run() {
       await dockerCommand(`pull ${pull_params} ${image}`);
       core.info(`Pulled OK: ${image}`);
 
+      // Parse the command into an array of arguments
+      const parsedCommand = shellQuote.parse(command);
+
+      // Escape and quote each argument
+      const escapedCommand = shellQuote.quote(parsedCommand);
+
+      // Construct the full Docker command
+      const fullCommand = [
+         'run',
+         ...shellQuote.parse(params),
+         '-w', guestDir,
+         '-v', `${hostDir}:${guestDir}`,
+         image,
+         '/bin/sh',
+         '-c',
+         escapedCommand
+     ];
+
       // run it
-      await dockerCommand(`run ${params} -w ${guestDir} -v${hostDir}:${guestDir} ${image} ${command}`);
-      core.info (`Ran OK: ${command}`);
+      await dockerCommand(shellQuote.quote(fullCommand));
+      core.info (`Ran OK: ${shellQuote.quote(fullCommand)}`);
 
    } catch (error: any) {
       core.setFailed(error.message);
