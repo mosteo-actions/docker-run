@@ -12,5 +12,7 @@ jobs:
     - name: test docker-run action
       uses: ./
       with:
-        params: |
-          echo INSIDE && cat /etc/os-release && ls -alF
+        command: |
+          echo INSIDE
+          cat /etc/os-release
+          ls -alF && whoami
