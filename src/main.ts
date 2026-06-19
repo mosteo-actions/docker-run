@@ -1,5 +1,5 @@
-const core = require('@actions/core');
-const { dockerCommand } = require('docker-cli-js');
+import * as core from '@actions/core';
+import { dockerCommand } from 'docker-cli-js';
 
 async function run() {
    try {
