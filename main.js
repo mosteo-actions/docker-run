@@ -9,7 +9,6 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 const core = require('@actions/core');
-const github = require('@actions/github');
 const { dockerCommand } = require('docker-cli-js');
 function run() {
     return __awaiter(this, void 0, void 0, function* () {

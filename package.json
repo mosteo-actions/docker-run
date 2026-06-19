@@ -10,10 +10,8 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "@actions/core": "^1.2.2",
-    "@actions/github": "^2.1.1",
-    "docker-cli-js": "^2.7.1",
-    "typescript": "^5.3.3",
-    "shell-quote": "*"
+    "@actions/core": "^3.0.1",
+    "docker-cli-js": "^2.10.0",
+    "typescript": "^5.9.3"
   }
 }
